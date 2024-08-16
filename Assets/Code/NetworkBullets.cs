@@ -7,9 +7,10 @@ using UnityEngine;
 public class NetworkBullets : NetworkBehaviour
 {
     private float speed = 8f;
-    private float lifetime = 3f;
+    private float lifetime = 4f;
     private Vector3 bulletSpawnPosition;
     private Vector3 bulletShotDirection;
+    private String bulletOwner;
     public override void OnNetworkSpawn()
     {
         transform.position = bulletSpawnPosition;
@@ -18,19 +19,45 @@ public class NetworkBullets : NetworkBehaviour
         GetComponent<Rigidbody2D>().velocity = bulletvelocity * speed;
     }
 
-    public void spawninformation(Vector3 spawnposition, Vector3 bulletdirection)
+    public void spawninformation(Vector3 spawnposition, Vector3 bulletdirection, String owner)
     {
         bulletSpawnPosition = spawnposition;
         bulletShotDirection = bulletdirection;
+        bulletOwner = owner;
     }
 
     private void Update()
     {
+        if (!IsOwner) return;
+        
         lifetime -= 2.5f * Time.deltaTime;
 
         if (lifetime <= 0)
         {
-            Destroy(gameObject);
+            DestroyBulletServerRpc();
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!IsOwner) return;
+        
+        if (other.tag != bulletOwner)
+        {
+            other.GetComponent<HealthCode>().TakeDamage();
+            DestroyBulletServerRpc();
+        }
+    }
+
+    [ServerRpc]
+    private void DestroyBulletServerRpc()
+    {
+        DestroyBulletClientRpc();
+    }
+    
+    [ClientRpc]
+    private void DestroyBulletClientRpc()
+    {
+        Destroy(gameObject);
     }
 }

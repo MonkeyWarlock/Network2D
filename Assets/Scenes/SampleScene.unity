@@ -399,7 +399,7 @@ GameObject:
   - component: {fileID: 956708473}
   - component: {fileID: 956708475}
   m_Layer: 0
-  m_Name: NetworkSpawner
+  m_Name: Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -454,6 +454,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnedPrefab: {fileID: 949191998631466298, guid: 043171490158c9842a9e7861452c5b78, type: 3}
+  spawnEnemyPrefab: {fileID: 335028560844283412, guid: adaa24d067d884b48a4642a0da799145, type: 3}
+  spawnEnemyPosition: {x: 5, y: -2.5, z: 0}
 --- !u!1 &1022297957
 GameObject:
   m_ObjectHideFlags: 0
