@@ -42,7 +42,12 @@ public class NetworkBullets : NetworkBehaviour
     {
         if (!IsOwner) return;
         
-        if (other.tag != bulletOwner)
+        if (other.CompareTag("Obstacle"))
+        {
+            DestroyBulletServerRpc();
+        }
+        
+        if (!other.CompareTag(bulletOwner) && !other.CompareTag("Obstacle"))
         {
             other.GetComponent<HealthCode>().TakeDamage();
             DestroyBulletServerRpc();
